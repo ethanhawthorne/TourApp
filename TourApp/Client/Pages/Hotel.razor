@@ -1,0 +1,67 @@
+﻿@page "/Hotels"
+@using TourApp.Shared;
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+<h3>Hotel</h3>
+@if (hots is null)
+{
+	<span>Loading Hotels</span>
+}
+else
+{
+	<table>
+		<thead>
+			<tr>
+				<th>HotelName</th>
+				<th>RoomtType</th>
+				<th>Cost</th>
+				<th>AvailableSpaces</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var hot in hots)
+			{
+				<tr>
+
+					<td width="5%">@hot.HotelName</td>
+					<td width="5%">@hot.RoomType</td>
+					<td width="5%">@hot.Cost</td>
+					<td width="5%">@hot.AvailableSpaces</td>
+
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+
+
+
+
+
+
+@code {
+		List<Hotels>? hots;
+
+		protected override async Task OnInitializedAsync()
+		{
+			var result = await Http.GetFromJsonAsync<List<Hotels>>("/api/Hotels");
+			if (result != null)
+
+				hots = result;
+
+		}
+		void EditCustomer(int id)
+		{
+			NavigationManager.NavigateTo($"/Hotels/{id}");
+		}
+
+		void AddCustomer()
+		{
+			NavigationManager.NavigateTo("/Hotels/");
+		}
+}
+
+
+
+
