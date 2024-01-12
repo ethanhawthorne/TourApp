@@ -43,7 +43,7 @@ namespace TourApp.Server.Controllers
 			_context.AppUsers.Add(rege);
 			await _context.SaveChangesAsync();
 
-			return await GetAllRegister();
+			return Redirect("/");
 		}
 
 		[HttpPut("Register/{id}")]
@@ -54,7 +54,7 @@ namespace TourApp.Server.Controllers
 			{
 				return NotFound("This Hotel does not exist");
 			}
-			BookingDB.UserID = rege.UserID;
+			BookingDB.Id = rege.Id;
 			BookingDB.FullName = rege.FullName;
 			BookingDB.PassPort = rege.PassPort;
 			BookingDB.Phone = rege.Phone;

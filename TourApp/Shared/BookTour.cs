@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace TourApp.Shared
 {
+
     public class BookTour
     {
         public Guid BookTourID { get; set; }
-        public String UserID { get; set; }
+        public string UsersId { get; set; }
         public Guid TourID { get; set; }
 
         public DateTime TourStrartDate { get; set; }

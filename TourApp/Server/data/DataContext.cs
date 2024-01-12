@@ -29,7 +29,7 @@ namespace TourApp.Server.data
 			modelBuilder.Entity<HotelAvailability>().HasKey(ha => ha.HotelAvailabilityID);
 			modelBuilder.Entity<TourAvailability>().HasKey(ta => ta.TourAvailabilityID);
             modelBuilder.Entity<Package>().HasKey(p => p.PackageID);
-			modelBuilder.Entity<Users>().HasKey(u => u.UserID);
+			modelBuilder.Entity<Users>().HasKey(u => u.Id);
 
             modelBuilder.Entity<Package>()
                 .HasOne(p => p.Tours)
@@ -64,7 +64,7 @@ namespace TourApp.Server.data
 			modelBuilder.Entity<BookTour>()
 				.HasOne(p => p.Users)
 				.WithMany()
-				.HasForeignKey(p => p.UserID);
+				.HasForeignKey(p => p.UsersId);
 
 			base.OnModelCreating(modelBuilder);
 

@@ -6,34 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TourApp.Server.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigrations : Migration
+    public partial class FirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "UserID",
-                table: "BTours",
-                type: "nvarchar(450)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<Guid>(
-                name: "UserID",
-                table: "BHotels",
-                type: "uniqueidentifier",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AddColumn<string>(
-                name: "UsersId",
-                table: "BHotels",
-                type: "nvarchar(450)",
-                nullable: false,
-                defaultValue: "");
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -53,7 +30,6 @@ namespace TourApp.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PassPort = table.Column<int>(type: "int", nullable: false),
                     Phone = table.Column<int>(type: "int", nullable: false),
@@ -75,6 +51,36 @@ namespace TourApp.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Hotels",
+                columns: table => new
+                {
+                    HotelID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HotelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RoomType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AvailableSpaces = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hotels", x => x.HotelID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tours",
+                columns: table => new
+                {
+                    TourID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TourName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    AvailibleSpaces = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tours", x => x.TourID);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,45 +189,125 @@ namespace TourApp.Server.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TourAvailabilities_TourID",
-                table: "TourAvailabilities",
-                column: "TourID");
+            migrationBuilder.CreateTable(
+                name: "BHotels",
+                columns: table => new
+                {
+                    BookHotelID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HotelID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CheckInDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CheckOutDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BHotels", x => x.BookHotelID);
+                    table.ForeignKey(
+                        name: "FK_BHotels_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BHotels_Hotels_HotelID",
+                        column: x => x.HotelID,
+                        principalTable: "Hotels",
+                        principalColumn: "HotelID",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Packages_HotelID",
-                table: "Packages",
-                column: "HotelID");
+            migrationBuilder.CreateTable(
+                name: "HotelAvailabilities",
+                columns: table => new
+                {
+                    HotelAvailabilityID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HotelID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AvailableFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AvailableTo = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HotelAvailabilities", x => x.HotelAvailabilityID);
+                    table.ForeignKey(
+                        name: "FK_HotelAvailabilities_Hotels_HotelID",
+                        column: x => x.HotelID,
+                        principalTable: "Hotels",
+                        principalColumn: "HotelID",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Packages_TourID",
-                table: "Packages",
-                column: "TourID");
+            migrationBuilder.CreateTable(
+                name: "BTours",
+                columns: table => new
+                {
+                    BookTourID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TourID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TourStrartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TourEndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BTours", x => x.BookTourID);
+                    table.ForeignKey(
+                        name: "FK_BTours_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BTours_Tours_TourID",
+                        column: x => x.TourID,
+                        principalTable: "Tours",
+                        principalColumn: "TourID",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_HotelAvailabilities_HotelID",
-                table: "HotelAvailabilities",
-                column: "HotelID");
+            migrationBuilder.CreateTable(
+                name: "Packages",
+                columns: table => new
+                {
+                    PackageID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HotelID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TourID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Packages", x => x.PackageID);
+                    table.ForeignKey(
+                        name: "FK_Packages_Hotels_HotelID",
+                        column: x => x.HotelID,
+                        principalTable: "Hotels",
+                        principalColumn: "HotelID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Packages_Tours_TourID",
+                        column: x => x.TourID,
+                        principalTable: "Tours",
+                        principalColumn: "TourID",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_BTours_TourID",
-                table: "BTours",
-                column: "TourID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BTours_UserID",
-                table: "BTours",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BHotels_HotelID",
-                table: "BHotels",
-                column: "HotelID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BHotels_UsersId",
-                table: "BHotels",
-                column: "UsersId");
+            migrationBuilder.CreateTable(
+                name: "TourAvailabilities",
+                columns: table => new
+                {
+                    TourAvailabilityID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TourID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AvailableFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AvailableTo = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TourAvailabilities", x => x.TourAvailabilityID);
+                    table.ForeignKey(
+                        name: "FK_TourAvailabilities_Tours_TourID",
+                        column: x => x.TourID,
+                        principalTable: "Tours",
+                        principalColumn: "TourID",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -262,106 +348,50 @@ namespace TourApp.Server.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_BHotels_AspNetUsers_UsersId",
+            migrationBuilder.CreateIndex(
+                name: "IX_BHotels_HotelID",
                 table: "BHotels",
-                column: "UsersId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "HotelID");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_BHotels_Hotels_HotelID",
+            migrationBuilder.CreateIndex(
+                name: "IX_BHotels_UsersId",
                 table: "BHotels",
-                column: "HotelID",
-                principalTable: "Hotels",
-                principalColumn: "HotelID",
-                onDelete: ReferentialAction.Cascade);
+                column: "UsersId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_BTours_AspNetUsers_UserID",
+            migrationBuilder.CreateIndex(
+                name: "IX_BTours_TourID",
                 table: "BTours",
-                column: "UserID",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                column: "TourID");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_BTours_Tours_TourID",
+            migrationBuilder.CreateIndex(
+                name: "IX_BTours_UsersId",
                 table: "BTours",
-                column: "TourID",
-                principalTable: "Tours",
-                principalColumn: "TourID",
-                onDelete: ReferentialAction.Cascade);
+                column: "UsersId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_HotelAvailabilities_Hotels_HotelID",
+            migrationBuilder.CreateIndex(
+                name: "IX_HotelAvailabilities_HotelID",
                 table: "HotelAvailabilities",
-                column: "HotelID",
-                principalTable: "Hotels",
-                principalColumn: "HotelID",
-                onDelete: ReferentialAction.Cascade);
+                column: "HotelID");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Packages_Hotels_HotelID",
+            migrationBuilder.CreateIndex(
+                name: "IX_Packages_HotelID",
                 table: "Packages",
-                column: "HotelID",
-                principalTable: "Hotels",
-                principalColumn: "HotelID",
-                onDelete: ReferentialAction.Cascade);
+                column: "HotelID");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Packages_Tours_TourID",
+            migrationBuilder.CreateIndex(
+                name: "IX_Packages_TourID",
                 table: "Packages",
-                column: "TourID",
-                principalTable: "Tours",
-                principalColumn: "TourID",
-                onDelete: ReferentialAction.Cascade);
+                column: "TourID");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_TourAvailabilities_Tours_TourID",
+            migrationBuilder.CreateIndex(
+                name: "IX_TourAvailabilities_TourID",
                 table: "TourAvailabilities",
-                column: "TourID",
-                principalTable: "Tours",
-                principalColumn: "TourID",
-                onDelete: ReferentialAction.Cascade);
+                column: "TourID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_BHotels_AspNetUsers_UsersId",
-                table: "BHotels");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_BHotels_Hotels_HotelID",
-                table: "BHotels");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_BTours_AspNetUsers_UserID",
-                table: "BTours");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_BTours_Tours_TourID",
-                table: "BTours");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_HotelAvailabilities_Hotels_HotelID",
-                table: "HotelAvailabilities");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Packages_Hotels_HotelID",
-                table: "Packages");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Packages_Tours_TourID",
-                table: "Packages");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_TourAvailabilities_Tours_TourID",
-                table: "TourAvailabilities");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -378,62 +408,31 @@ namespace TourApp.Server.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BHotels");
+
+            migrationBuilder.DropTable(
+                name: "BTours");
+
+            migrationBuilder.DropTable(
+                name: "HotelAvailabilities");
+
+            migrationBuilder.DropTable(
+                name: "Packages");
+
+            migrationBuilder.DropTable(
+                name: "TourAvailabilities");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropIndex(
-                name: "IX_TourAvailabilities_TourID",
-                table: "TourAvailabilities");
+            migrationBuilder.DropTable(
+                name: "Hotels");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Packages_HotelID",
-                table: "Packages");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Packages_TourID",
-                table: "Packages");
-
-            migrationBuilder.DropIndex(
-                name: "IX_HotelAvailabilities_HotelID",
-                table: "HotelAvailabilities");
-
-            migrationBuilder.DropIndex(
-                name: "IX_BTours_TourID",
-                table: "BTours");
-
-            migrationBuilder.DropIndex(
-                name: "IX_BTours_UserID",
-                table: "BTours");
-
-            migrationBuilder.DropIndex(
-                name: "IX_BHotels_HotelID",
-                table: "BHotels");
-
-            migrationBuilder.DropIndex(
-                name: "IX_BHotels_UsersId",
-                table: "BHotels");
-
-            migrationBuilder.DropColumn(
-                name: "UsersId",
-                table: "BHotels");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "UserID",
-                table: "BTours",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(450)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "UserID",
-                table: "BHotels",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(Guid),
-                oldType: "uniqueidentifier");
+            migrationBuilder.DropTable(
+                name: "Tours");
         }
     }
 }

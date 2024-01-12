@@ -9,7 +9,7 @@ namespace TourApp.Shared
     public class BookHotel
     {
         public Guid BookHotelID {  get; set; }
-        public Guid UserID { get; set; }
+        public string UsersId { get; set; }
         public Guid HotelID { get; set; }
 
         public DateTime CheckInDate { get; set; }

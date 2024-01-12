@@ -54,7 +54,7 @@ namespace BlazorWebCW1.Server.Controllers
             {
                 return NotFound("This Hotel does not exist");
             }
-            BookingDB.UserID = Hote.UserID;
+            BookingDB.UsersId = Hote.UsersId;
             BookingDB.HotelID = Hote.HotelID;
             BookingDB.CheckInDate = Hote.CheckInDate;
             BookingDB.CheckOutDate = Hote.CheckOutDate;

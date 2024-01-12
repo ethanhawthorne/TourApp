@@ -12,8 +12,8 @@ using TourApp.Server.data;
 namespace TourApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240111105120_FirstMigrations")]
-    partial class FirstMigrations
+    [Migration("20240111194712_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,9 +173,6 @@ namespace TourApp.Server.Migrations
                     b.Property<Guid>("HotelID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("UsersId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -204,7 +201,7 @@ namespace TourApp.Server.Migrations
                     b.Property<DateTime>("TourStrartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserID")
+                    b.Property<string>("UsersId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -212,7 +209,7 @@ namespace TourApp.Server.Migrations
 
                     b.HasIndex("TourID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UsersId");
 
                     b.ToTable("BTours");
                 });
@@ -392,9 +389,6 @@ namespace TourApp.Server.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("UserID")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -492,7 +486,7 @@ namespace TourApp.Server.Migrations
 
                     b.HasOne("TourApp.Shared.Users", "Users")
                         .WithMany()
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
