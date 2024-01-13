@@ -68,6 +68,15 @@ namespace TourApp.Server.data
 
 			base.OnModelCreating(modelBuilder);
 
+			var manager = new IdentityRole("manager");
+			manager.NormalizedName = "manager";
+
+			var customer = new IdentityRole("customer");
+			customer.NormalizedName = "customer";
+
+			modelBuilder.Entity<IdentityRole>().HasData(manager, customer);
+			
+
 
 		}
 	}
