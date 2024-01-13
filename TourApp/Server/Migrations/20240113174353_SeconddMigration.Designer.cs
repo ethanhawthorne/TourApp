@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TourApp.Server.data;
 
@@ -11,9 +12,11 @@ using TourApp.Server.data;
 namespace TourApp.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240113174353_SeconddMigration")]
+    partial class SeconddMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,13 +54,13 @@ namespace TourApp.Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1fc8bffb-3d77-454d-ad1b-dd93fb2dd889",
+                            Id = "7c36f80f-1d29-49ca-830c-ea8ce1512ef7",
                             Name = "manager",
                             NormalizedName = "manager"
                         },
                         new
                         {
-                            Id = "b0d7782e-ed23-48f1-aadd-498e86604083",
+                            Id = "92473554-2bc8-4260-b1b2-14fc0e87ffd4",
                             Name = "customer",
                             NormalizedName = "customer"
                         });
@@ -386,11 +389,8 @@ namespace TourApp.Server.Migrations
                     b.Property<long>("PassPort")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Phone")
