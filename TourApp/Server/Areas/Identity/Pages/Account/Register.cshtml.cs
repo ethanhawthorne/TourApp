@@ -78,7 +78,7 @@ namespace TourApp.Server.Areas.Identity.Pages.Account
 			/// 
 			[Required]
 			[Display(Name = "Full Name")]
-			public string FullNname { get; set; }
+			public string FullName { get; set; }
 
 			[Required]
             [Display(Name = "UserName")]
@@ -129,14 +129,14 @@ namespace TourApp.Server.Areas.Identity.Pages.Account
                 // var user = CreateUser();
                 var user = new Users()
                 {
-                    FullName = Input.FullNname,
+                    FullName = Input.FullName,
                     UserName = Input.UserName,
                     Phone = Convert.ToInt64(Input.Phone),
                     PassPort = Convert.ToInt64(Input.PassPort)
 
                 };
 
-
+                Console.WriteLine("yo");
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
