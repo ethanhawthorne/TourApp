@@ -18,6 +18,8 @@ namespace TourApp.Shared
         public string Password { get; set; } = "";
 		public override string UserName { get; set; }
 
+        public bool IsAdmin { get; set; } = false;
+
 		public long PassPort { get; set; }
         public long Phone {  get; set; }
 
