@@ -4,19 +4,26 @@
 @using Microsoft.AspNetCore.Components.Authorization;
 @inject HttpClient Http
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
 <PageTitle>Index</PageTitle>
 
 
-<h1>@_authMessage</h1>
+@if(_userId == "")
+{
+    <p>Loading account...</p>
+}
+else
+{
+    <h1>Hello,@_userName,!</h1>
+    <br/>
+    <h4>Your unique ID is:@_userId</h4>
+}
 
-Welcome to your new app.
-
-<P>@_userId</P>
 
 @code {
 
-    private string _userId;
-    private string _authMessage;
+    private string _userId ="";
+    private string _userName;
     private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
 
     protected override async Task OnInitializedAsync()
@@ -31,15 +38,15 @@ Welcome to your new app.
         var authState = await myStateProv.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if (user.Identity.IsAuthenticated)
+        if (user.Identity.Name !="")
         {
-            _authMessage = $"{user.Identity.Name} is authenticated.";
+            _userName = $"{user.Identity.Name} is authenticated.";
             _claims = user.Claims;
-            _userId = $"User Id: {_claims.First().Value}";
+            _userId = $"{_claims.First().Value}";
         }
         else
         {
-            _authMessage = "the user is NOT authenticated.";
+            NavigationManager.NavigateTo("/Identity/Account/Register", forceLoad:true);
         }
 
     }

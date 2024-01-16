@@ -11,7 +11,7 @@ using TourApp.Server.data;
 using TourApp.Shared;
 using String = System.String;
 
-namespace PacificTours.Server.Controllers;
+namespace TourApp.Server.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
