@@ -14,6 +14,8 @@ using TourApp.Shared;
 
 namespace TourApp.Server.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
+    [IgnoreAntiforgeryToken]
     public class LogoutModel : PageModel
     {
         private readonly SignInManager<Users> _signInManager;

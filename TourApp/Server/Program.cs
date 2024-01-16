@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using TourApp.Server.data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Components.WebAssembly;
 using TourApp.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// This adds services to the container
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
