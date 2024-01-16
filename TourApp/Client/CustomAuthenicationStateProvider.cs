@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using String = System.String;
 
-
+//made a customer authentication state provider to all proper authorization
 namespace TourApp.Client
 {
 	public class CustomAuthenicationStateProvider : AuthenticationStateProvider
